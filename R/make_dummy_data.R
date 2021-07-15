@@ -39,16 +39,15 @@ d4 = distHaversine(c(divide.latitude, east), c(south, east))
 
 stratum <-
   data.frame(
-    stratum = "A",   "B",   "C",   "D",
+    stratum = c("A",   "B",   "C",   "D"),
     area =   c(d1*d3, d2*d3, d1*d4, d2*d4)
-    )
-  ) %>%
+    ) %>%
   mutate(
     n_stations = sample(2:20, nrow(.))
   )
 
 save_data <- function(dataset) {
-  save(dataset, file = file.path('data', paste0(deparse(substitute(dataset)), '.Rdata')))
+  saveRDS(dataset, file = file.path('data', paste0(deparse(substitute(dataset)), '.Rdata')))
 }
 
 save_data(element)

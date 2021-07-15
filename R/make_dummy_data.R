@@ -23,6 +23,12 @@ element <-
       latitude <= divide.latitude & longitude <= divide.longitude ~ "C",
       latitude <= divide.latitude & longitude  > divide.longitude ~ "D"
     )
+  ) %>%
+  mutate(
+    element = paste0(stratum, latitude, longitude)
+  ) %>%
+  relocate(
+    element
   )
 
 #   d1   d2

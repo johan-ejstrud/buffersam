@@ -13,14 +13,11 @@ See the paper for more detail.
    1. If the number of stations have been picked, remove the current stratum from the stratum list and repeat from 3. Otherwise repeat from ?i?.
 1. Go to 3.
 
-
 ## Area definitions.
 The _survay area_ is devided into a number of _stratums_ which contains _elements_. Each element is denoted by a fixed point, and has a surronding area. In the West Greenland shrimp survay eachelement is a rectangle which is roughly a 2-n.mi. square.
 
 The algorithm doesn't impose any requirements on how the elements are laid out, of how many of them are avaiable. However, an element list is needed; the algorithm cannot select arbitrary points within each stratum.
 $s_1$
-
-
 
 # Data needed
 
@@ -30,3 +27,5 @@ Straum, Number of stations, Area
 Elements in stratum:
 Stratum, Latitude, Longiture
 
+# GitHub page
+https://github.com/johan-ejstrud/buffsam

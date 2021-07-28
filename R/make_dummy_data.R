@@ -25,10 +25,10 @@ element <-
     )
   ) %>%
   mutate(
-    element = paste0(stratum, latitude, longitude)
+    elementId = paste0(stratum, latitude, longitude)
   ) %>%
   relocate(
-    element
+    elementId
   )
 
 #   d1   d2

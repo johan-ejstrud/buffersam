@@ -1,8 +1,6 @@
 library(dplyr)
 library(geosphere)
 library(ggplot2)
-library(ggforce)
-library(hexbin)
 
 distance_between_elements <- function(df, element1, element2) {
   distHaversine(element_coordinates(df, element1), element_coordinates(df, element2))
@@ -13,121 +11,102 @@ element_coordinates <- function(df, elementname) {
 }
 
 buffered_random_sampling <- function() {
-  element <- readRDS(file.path('data', 'element.Rdata'))
+  element <-
+    readRDS(file.path('data', 'element.Rdata')) %>%
+    mutate(
+      current = FALSE,
+      selected = FALSE,
+      selectable = TRUE,
+      temp_selected = FALSE,
+      outside_buffdist_of_selected = TRUE,
+      outside_buffdist_of_temp_selected = TRUE
+    )
+
   stratum <-
     readRDS(file.path('data', 'stratum.Rdata')) %>%
     mutate(sampling_density = n_stations/area) %>%
     arrange(sampling_density)
 
-  not_selected <- c(element$element)
-  selected <- c()
-
   for (i in 1:nrow(stratum)) {
     i=1
     current_stratum <- stratum$stratum[i]
     stations_required_in_stratum = stratum$n_stations[i]
-    buffering_distance <- sqrt((2*stratum$area[i]) / (pi*stations_required_in_stratum))
-    temp_not_selected <- c()
-    temp_selected <- c()
+    stratum_area <- stratum$area[i]
+
+    buffering_distance <- sqrt((2*stratum_area) / (pi*stations_required_in_stratum))
+
+    element_backup <- element # Used to restart if allocation fails for buffer distance
+
     n_selected_inside_stratum <- 0
 
     while (n_selected_inside_stratum < stations_required_in_stratum) {
-      print(length(not_selected))
-      current_element <- sample(not_selected, 1)
-      not_selected <- not_selected[not_selected != current_element]
+      filter(element, selectable) %>% nrow() %>% print()
 
-      distance_to_nearest_element <-
-        sapply(
-          c(selected, temp_selected),
-          FUN = distance_between_elements,
-          df = element,
-          element2 = current_element
-        ) %>%
-        unlist() %>%
-        min()
+      current_element <-
+        element %>% filter(selectable) %>% select(elementId) %>% sample(size=1)
 
-      if (distance_to_nearest_element > buffering_distance) {
-        temp_selected <- c(temp_selected, current_element)
+      element <- mutate(element, current = ifelse(elementId == current_element, TRUE, FALSE))
+
+      # Remove all points in temp_not_selected that are within the buffering
+      # distance of the newly selected point. That way all new selected
+      # points are automatically within the allowed distance
+      distance_to_current_element <-
+        distHaversine(
+          p1 = element %>% filter(current) %>% select(longitude, latitude),
+          p2 = element %>% select(longitude, latitude)
+        )
+
+      if (element[current_element, "stratum"] == current_stratum) {
+        element[current_element, "selected"] <- TRUE
+        element[distance_to_current_element <= buffering_distance, "outside_buffdist_of_selected"] <- FALSE
       } else {
-        temp_not_selected <- c(temp_not_selected, current_element)
+        element[current_element, "temp_selected"] <- TRUE
+        element[distance_to_current_element <= buffering_distance, "outside_buffdist_of_temp_selected"] <- FALSE
       }
 
+      element <-
+        element %>%
+        mutate(selectable = outside_buffdist_of_selected & outside_buffdist_of_temp_selected)
+
+
+      visualise(df=element)
+      browser()
+
       n_selected_inside_stratum <-
-        filter(element, element %in% temp_selected & stratum == current_stratum) %>%
+        element %>%
+        filter(selected & stratum == current_stratum) %>%
         nrow()
 
-      if (length(not_selected) == 0) {
+      n_selectable_elements <- filter(element, selectable) %>% nrow()
+
+      if (n_selectable_elements == 0) {
         print("Restarting. Decreasing buffer distance.")
+        browser()
 
         # Restart sampling with reduced buffering distance
         buffering_distance <- buffering_distance * .9
-        not_selected <- c(not_selected, temp_selected, temp_not_selected)
-        temp_not_selected <- c()
-        temp_selected <- c()
+        element <- element_backup
       }
-
-      print(paste("Sucessfully allocated for stratum", current_stratum))
-      df <-
-        element %>%
-        data.frame() %>%
-        mutate(
-          current_element = element == current_element,
-          selected = element %in% selected,
-          not_selected = element %in% not_selected,
-          temp_selected = element %in% temp_selected,
-          temp_not_selected = element %in% temp_not_selected
-        )
-
-      print(
-        ggplot(df, aes(x=longitude, y=latitude)) +
-          geom_tile(aes(fill=stratum)) + # Stratum
-          scale_fill_brewer(type="qua", palette=4) +
-          geom_point(data=subset(df, not_selected), colour="grey") + # All points
-          geom_point(data=subset(df, current_element), size=3, colour="black") +
-          geom_point(data=subset(df, temp_selected), colour="green") +
-          geom_point(data=subset(df, temp_not_selected), colour="red") +
-          geom_point(data=subset(df, selected), shape=21, colour="black", fill="green") +
-          theme_light()
-      )
-      browser()
     }
 
     # Enough stations have been selected. Cleanup before starting next stratum.
-    element_in_current_stratum <- element$stratum == current_stratum
-
-    selected <-
-      c(selected,
-        intersect(temp_selected, element$element[element$stratum == current_stratum])
-      )
-
-    not_selected <-
-      c(not_selected,
-        temp_not_selected,
-        intersect(temp_selected, element$element[element$stratum != current_stratum])
+    elements <-
+      elements %>%
+      mutate(
+        temp_selected = FALSE,
+        within_buffdist_of_temp_selected = FALSE
       )
   }
 }
 
-visualise <- function() {
-  df <-
-    element %>%
-    data.frame() %>%
-    mutate(
-      current_element = element == current_element,
-      selected = element %in% selected,
-      not_selected = element %in% not_selected,
-      temp_selected = element %in% temp_selected,
-      temp_not_selected = element %in% temp_not_selected
-    )
-
+visualise <- function(df) {
   print(
     ggplot(df, aes(x=longitude, y=latitude)) +
       geom_tile(aes(fill=stratum)) + # Stratum
       scale_fill_brewer(type="qua", palette=4) +
-      geom_point(data=subset(df, not_selected), colour="grey") + # All points
-      geom_point(data=subset(df, current_element), size=3, colour="black") +
-      geom_point(data=subset(df, temp_selected), colour="green") +
-      geom_point(data=subset(df, temp_not_selected), colour="red") +
+      geom_point(data=subset(df, selectable), colour="grey") + # All points
+      # geom_point(data=subset(df, current_element), size=3, colour="black") +
+      geom_point(data=subset(df, temp_selected), colour="blue") +
       geom_point(data=subset(df, selected), shape=21, colour="black", fill="green") +
       theme_light()
   )

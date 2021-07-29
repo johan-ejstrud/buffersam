@@ -1,13 +1,12 @@
 Package: buffsam
-Title: What the Package Does (One Line, Title Case)
+Title: Run Buffered Random Sampling Algorithm
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Johan",
+           family = "Ejstrud",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "johan@ejstrud")
+Description: Implements the buffered random sampling algorithm that is used at the Greenland institute of natural resources.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8

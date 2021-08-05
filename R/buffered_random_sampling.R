@@ -25,9 +25,9 @@ buffered_random_sampling <- function() {
     buffering_distance <- sqrt((2*stratum_area) / (pi*stations_required_in_stratum))
     element$selectable <- TRUE
     element$temp_selected <- FALSE
-    element_backup <- element # Used to restart if allocation fails for buffer distance
     selected_elements <- element %>% filter(selected) %>% select(elementId) %>% unlist()
     element <- update_selectable(element, selected_elements, buffering_distance)
+    element_backup <- element # Used to restart if allocation fails for buffer distance
 
     while (n_selected_in_stratum(element, current_stratum) < stations_required_in_stratum) {
       current_element <- sample(which(element$selectable), 1)
@@ -50,12 +50,7 @@ buffered_random_sampling <- function() {
       if (n_selectable_in_stratum(element, current_stratum) == 0) {
         # Restart sampling with reduced buffering distance
         element <- element_backup
-
-        element$selectable <- TRUE
         buffering_distance <- buffering_distance * .9
-
-        selected_elements <- element %>% filter(selected) %>% select(elementId) %>% unlist()
-        element <- update_selectable(element, selected_elements, buffering_distance)
       }
     }
   }

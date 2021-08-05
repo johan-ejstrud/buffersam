@@ -32,11 +32,10 @@ buffered_random_sampling <- function() {
     while (n_selected_in_stratum(element, current_stratum) < stations_required_in_stratum) {
       current_element <- sample(which(element$selectable), 1)
 
-      element$current <-
-        ifelse(1:nrow(element) == current_element, TRUE, FALSE)
+      element$current <- ifelse(1:nrow(element) == current_element, TRUE, FALSE)
 
       # Mark current element as either selected or temp_selected depending on if
-      # it is inside stratum
+      # it is inside the current stratum
       if (element[which(element$current), "stratum"] == current_stratum) {
         selection_column <- "selected"
       } else{
@@ -48,12 +47,7 @@ buffered_random_sampling <- function() {
                                    element[which(element$current), "elementId"],
                                    buffering_distance)
 
-      n_selected_inside_stratum <-
-        element %>%
-        filter(selected & stratum == current_stratum) %>%
-        nrow()
-
-      if ( element %>% filter(selectable & stratum == current_stratum) %>% nrow() == 0) {
+      if (n_selectable_in_stratum(element, current_stratum) == 0) {
         # Restart sampling with reduced buffering distance
         element <- element_backup
 
@@ -68,6 +62,10 @@ buffered_random_sampling <- function() {
 }
 
 n_selected_in_stratum <- function(element, current_stratum) {
+  element %>% filter(selected & stratum == current_stratum) %>% nrow()
+}
+
+n_selectable_in_stratum <- function(element, current_stratum) {
   element %>% filter(selected & stratum == current_stratum) %>% nrow()
 }
 

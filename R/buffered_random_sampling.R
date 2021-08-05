@@ -29,15 +29,17 @@ buffered_random_sampling <- function() {
     selected_elements <- element %>% filter(selected) %>% select(elementId) %>% unlist()
     element <- update_selectable(element, selected_elements, buffering_distance)
 
-    n_selected_inside_stratum <- 0
+    n_selected_inside_stratum <-
+      element %>% filter(selected & stratum == current_stratum) %>% nrow()
 
     repeat {
-      random_selectable_element <- sample(which(element$selectable), 1)
+      current_element <- sample(which(element$selectable), 1)
 
       element$current <-
-        ifelse(1:nrow(element) == random_selectable_element, TRUE, FALSE)
+        ifelse(1:nrow(element) == current_element, TRUE, FALSE)
 
-      # Mark current element as either selected or temp_selected
+      # Mark current element as either selected or temp_selected depending on if
+      # it is inside stratum
       if (element[which(element$current), "stratum"] == current_stratum) {
         selection_column <- "selected"
       } else{

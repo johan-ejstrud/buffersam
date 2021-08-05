@@ -29,10 +29,7 @@ buffered_random_sampling <- function() {
     selected_elements <- element %>% filter(selected) %>% select(elementId) %>% unlist()
     element <- update_selectable(element, selected_elements, buffering_distance)
 
-    n_selected_inside_stratum <-
-      element %>% filter(selected & stratum == current_stratum) %>% nrow()
-
-    repeat {
+    while (n_selected_in_stratum(element, current_stratum) < stations_required_in_stratum) {
       current_element <- sample(which(element$selectable), 1)
 
       element$current <-
@@ -56,13 +53,6 @@ buffered_random_sampling <- function() {
         filter(selected & stratum == current_stratum) %>%
         nrow()
 
-      if (n_selected_inside_stratum == stations_required_in_stratum) {
-        # visualise(element)
-        # browser()
-
-        break
-      }
-
       if ( element %>% filter(selectable & stratum == current_stratum) %>% nrow() == 0) {
         # Restart sampling with reduced buffering distance
         element <- element_backup
@@ -75,6 +65,10 @@ buffered_random_sampling <- function() {
       }
     }
   }
+}
+
+n_selected_in_stratum <- function(element, current_stratum) {
+  element %>% filter(selected & stratum == current_stratum) %>% nrow()
 }
 
 update_selectable <- function(element, element_Ids, buffering_distance) {

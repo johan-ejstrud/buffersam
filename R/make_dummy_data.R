@@ -1,9 +1,9 @@
 set.seed(92)
 
-north <- 72
+north <- 70
 south <- 59
-west <- -56
-east <- -48
+west <- -58
+east <- -44
 border <- 1.5
 
 divide.latitude  <- (north - south) * 0.8 + south
@@ -11,8 +11,8 @@ divide.longitude <- (west - east) * 0.6 + east
 
 border <-
   expand.grid(
-    latitude  = seq(south-border, north+border, by=1/4),
-    longitude = seq(west-border, east+border, by=1/4)
+    latitude  = seq(south-border, north+border, by=1/2),
+    longitude = seq(west-border, east+border, by=1/2)
   ) %>%
   dplyr::filter(
     latitude > north | latitude < south | longitude < west | longitude > east

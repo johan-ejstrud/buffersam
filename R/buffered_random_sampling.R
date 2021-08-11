@@ -65,7 +65,7 @@ n_selected_in_stratum <- function(element, current_stratum) {
 }
 
 n_selectable_in_stratum <- function(element, current_stratum) {
-  element %>% dplyr::filter(.data$selected & stratum == current_stratum) %>% nrow()
+  element %>% dplyr::filter(.data$selectable & stratum == current_stratum) %>% nrow()
 }
 
 update_selectable <- function(element, element_Ids, buffering_distance) {

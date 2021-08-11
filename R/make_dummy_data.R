@@ -4,9 +4,20 @@ north <- 72
 south <- 59
 west <- -56
 east <- -48
+border <- 1.5
 
 divide.latitude  <- (north - south) * 0.8 + south
 divide.longitude <- (west - east) * 0.6 + east
+
+border <-
+  expand.grid(
+    latitude  = seq(south-border, north+border, by=1/4),
+    longitude = seq(west-border, east+border, by=1/4)
+  ) %>%
+  dplyr::filter(
+    latitude > north | latitude < south | longitude < west | longitude > east
+  ) %>%
+  dplyr::mutate(stratum = "border")
 
 element <-
   expand.grid(
@@ -21,6 +32,7 @@ element <-
       latitude <= divide.latitude & longitude  > divide.longitude ~ "D"
     )
   ) %>%
+  rbind(border) %>%
   dplyr::mutate(
     elementId = paste0(stratum, latitude, longitude)
   ) %>%

@@ -1,11 +1,8 @@
-library(dplyr)
-library(geosphere)
-library(ggplot2)
-
+#' @importFrom rlang .data
 buffered_random_sampling <- function() {
   element <-
-    readRDS(file.path('data', 'element.Rdata')) %>%
-    mutate(
+    readRDS(file.path('inst/extdata', 'element.Rdata')) %>%
+    dplyr::mutate(
       current = FALSE,
       selected = FALSE,
       selectable = TRUE,
@@ -13,9 +10,9 @@ buffered_random_sampling <- function() {
     )
 
   stratum <-
-    readRDS(file.path('data', 'stratum.Rdata')) %>%
-    mutate(sampling_density = n_stations/area) %>%
-    arrange(sampling_density)
+    readRDS(file.path('inst/extdata', 'stratum.Rdata')) %>%
+    dplyr::mutate(sampling_density = .data$n_stations/.data$area) %>%
+    dplyr::arrange(.data$sampling_density)
 
   for (i in 1:nrow(stratum)) {
     current_stratum <- stratum$stratum[i]
@@ -25,7 +22,12 @@ buffered_random_sampling <- function() {
     buffering_distance <- sqrt((2*stratum_area) / (pi*stations_required_in_stratum))
     element$selectable <- TRUE
     element$temp_selected <- FALSE
-    selected_elements <- element %>% filter(selected) %>% select(elementId) %>% unlist()
+    selected_elements <-
+      element %>%
+      dplyr::filter(.data$selected) %>%
+      dplyr::select(.data$elementId) %>%
+      unlist()
+
     element <- update_selectable(element, selected_elements, buffering_distance)
     element_backup <- element # Used to restart if allocation fails for buffer distance
 
@@ -57,19 +59,25 @@ buffered_random_sampling <- function() {
 }
 
 n_selected_in_stratum <- function(element, current_stratum) {
-  element %>% filter(selected & stratum == current_stratum) %>% nrow()
+  element %>% dplyr::filter(.data$selected & stratum == current_stratum) %>% nrow()
 }
 
 n_selectable_in_stratum <- function(element, current_stratum) {
-  element %>% filter(selected & stratum == current_stratum) %>% nrow()
+  element %>% dplyr::filter(.data$selected & stratum == current_stratum) %>% nrow()
 }
 
 update_selectable <- function(element, element_Ids, buffering_distance) {
   for (element_Id in element_Ids) {
     distance_to_selected_element <-
-      distHaversine(
-        p1 = element %>% filter(elementId == element_Id) %>% select(longitude, latitude),
-        p2 = element %>% filter(selectable) %>% select(longitude, latitude)
+      geosphere::distHaversine(
+        p1 =
+          element %>%
+          dplyr::filter(.data$elementId == element_Id) %>%
+          dplyr::select(.data$longitude, .data$latitude),
+        p2 =
+          element %>%
+          dplyr::filter(.data$selectable) %>%
+          dplyr::select(.data$longitude, .data$latitude)
       )
 
     element[which(element$selectable), "selectable"] <-
@@ -78,14 +86,15 @@ update_selectable <- function(element, element_Ids, buffering_distance) {
   return(element)
 }
 
+#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_brewer geom_point theme_light
 visualise <- function(df) {
   print(
-    ggplot(df, aes(x=longitude, y=latitude)) +
+    ggplot(df, aes(x=.data$longitude, y=.data$latitude)) +
       geom_tile(aes(fill=stratum)) + # Stratum
       scale_fill_brewer(type="qua", palette=4) +
-      geom_point(data=subset(df, selectable), colour="grey") + # All points
-      geom_point(data=subset(df, temp_selected), colour="blue") +
-      geom_point(data=subset(df, selected), shape=21, colour="black", fill="green") +
+      geom_point(data=subset(df, .data$selectable), colour="grey") + # All points
+      geom_point(data=subset(df, .data$temp_selected), colour="blue") +
+      geom_point(data=subset(df, .data$selected), shape=21, colour="black", fill="green") +
       theme_light()
   )
 }

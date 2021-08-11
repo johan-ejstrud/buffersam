@@ -1,6 +1,3 @@
-library(dplyr)
-library(geosphere)
-
 set.seed(92)
 
 north <- 72
@@ -16,18 +13,18 @@ element <-
     latitude = seq(south, north, by=1/4),
     longitude = seq(west, east, by=1/4)
   ) %>%
-  mutate(
-    stratum = case_when(
+  dplyr::mutate(
+    stratum = dplyr::case_when(
       latitude  > divide.latitude & longitude <= divide.longitude ~ "A",
       latitude  > divide.latitude & longitude  > divide.longitude ~ "B",
       latitude <= divide.latitude & longitude <= divide.longitude ~ "C",
       latitude <= divide.latitude & longitude  > divide.longitude ~ "D"
     )
   ) %>%
-  mutate(
+  dplyr::mutate(
     elementId = paste0(stratum, latitude, longitude)
   ) %>%
-  relocate(
+  dplyr::relocate(
     elementId
   )
 
@@ -38,22 +35,22 @@ element <-
 # | C  | D | d4
 # +----+---+
 
-d1 = distHaversine(c(north, west), c(north, divide.longitude))
-d2 = distHaversine(c(north, divide.longitude), c(north, east))
-d3 = distHaversine(c(north, east), c(divide.latitude, east))
-d4 = distHaversine(c(divide.latitude, east), c(south, east))
+d1 = geosphere::distHaversine(c(north, west), c(north, divide.longitude))
+d2 = geosphere::distHaversine(c(north, divide.longitude), c(north, east))
+d3 = geosphere::distHaversine(c(north, east), c(divide.latitude, east))
+d4 = geosphere::distHaversine(c(divide.latitude, east), c(south, east))
 
 stratum <-
   data.frame(
     stratum = c("A",   "B",   "C",   "D"),
     area =   c(d1*d3, d2*d3, d1*d4, d2*d4)
     ) %>%
-  mutate(
+  dplyr::mutate(
     n_stations = sample(2:20, nrow(.))
   )
 
 save_data <- function(dataset) {
-  saveRDS(dataset, file = file.path('data', paste0(deparse(substitute(dataset)), '.Rdata')))
+  saveRDS(dataset, file = file.path('inst/extdata', paste0(deparse(substitute(dataset)), '.Rdata')))
 }
 
 save_data(element)

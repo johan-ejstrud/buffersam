@@ -1,3 +1,5 @@
+utils::globalVariables(c("longitude", "latitude", "selectable", "temp_selected", "selected"))
+
 #' @importFrom rlang .data
 buffered_random_sampling <- function() {
   element <-
@@ -89,12 +91,12 @@ update_selectable <- function(element, element_Ids, buffering_distance) {
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_brewer geom_point theme_light
 visualise <- function(df) {
   print(
-    ggplot(df, aes(x=.data$longitude, y=.data$latitude)) +
+    ggplot(df, aes(x=longitude, y=latitude)) +
       geom_tile(aes(fill=stratum)) + # Stratum
       scale_fill_brewer(type="qua", palette=4) +
-      geom_point(data=subset(df, .data$selectable), colour="grey") + # All points
-      geom_point(data=subset(df, .data$temp_selected), colour="blue") +
-      geom_point(data=subset(df, .data$selected), shape=21, colour="black", fill="green") +
+      geom_point(data=subset(df, selectable), colour="grey") + # All points
+      geom_point(data=subset(df, temp_selected), colour="blue") +
+      geom_point(data=subset(df, selected), shape=21, colour="black", fill="green") +
       theme_light()
   )
 }

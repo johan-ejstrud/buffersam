@@ -1,4 +1,7 @@
-utils::globalVariables(c("longitude", "latitude", "selectable", "temp_selected", "selected"))
+utils::globalVariables(
+  c("longitude", "latitude", "selectable", "temp_selected", "selected",
+    "ne_countries", "geom_sf", "coord_sf")
+)
 
 #' @importFrom rlang .data
 buffered_random_sampling <- function() {
@@ -90,13 +93,19 @@ update_selectable <- function(element, element_Ids, buffering_distance) {
 
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_brewer geom_point theme_light
 visualise <- function(df) {
+  world <- ne_countries(scale = "medium", returnclass = "sf")
+  border <- 3
+
   print(
-    ggplot(df, aes(x=longitude, y=latitude)) +
-      geom_tile(aes(fill=stratum)) + # Stratum
+    ggplot(data = world) +
+      geom_sf() +
+      coord_sf(xlim = c(min(df$longitude)-border, max(df$longitude)+border),
+               ylim = c(min(df$latitude)-border, max(df$latitude)+border)) +
+      geom_tile(data = df, aes(x=longitude, y=latitude, fill=stratum), alpha=0.4) + # Stratum
       scale_fill_brewer(type="qua", palette=4) +
-      geom_point(data=subset(df, selectable), colour="grey") + # All points
-      geom_point(data=subset(df, temp_selected), colour="blue") +
-      geom_point(data=subset(df, selected), shape=21, colour="black", fill="green") +
+      geom_point(data=subset(df, selectable), aes(x=longitude, y=latitude), colour="grey") + # All points
+      geom_point(data=subset(df, temp_selected), aes(x=longitude, y=latitude), colour="blue") +
+      geom_point(data=subset(df, selected), aes(x=longitude, y=latitude), shape=21, colour="black", fill="green") +
       theme_light()
   )
 }

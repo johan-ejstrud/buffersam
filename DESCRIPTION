@@ -1,4 +1,4 @@
-Package: buffsam
+Package: buffersam
 Title: Run Buffered Random Sampling Algorithm
 Version: 0.0.0.9000
 Authors@R: 

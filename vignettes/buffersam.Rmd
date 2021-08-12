@@ -23,7 +23,7 @@ The main function of the package, `buffered_random_sampling`, requires two data 
 The package include two example data sets, `element` and `stratum`, that shows how they should look. (See the exact details by running `?element` and `?stratum` in the console.)
 
 ```{r setup}
-library(buffsam)
+library(buffersam)
 
 head(element)
 head(stratum)

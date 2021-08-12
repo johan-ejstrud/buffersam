@@ -14,7 +14,7 @@
 #' @importFrom rlang .data
 buffered_random_sampling <- function(elements=NULL, stratums=NULL) {
   element <-
-    readRDS(file.path('inst/extdata', 'element.Rdata')) %>%
+    elements %>%
     dplyr::mutate(
       current = FALSE,
       selected = FALSE,
@@ -23,7 +23,7 @@ buffered_random_sampling <- function(elements=NULL, stratums=NULL) {
     )
 
   stratum <-
-    readRDS(file.path('inst/extdata', 'stratum.Rdata')) %>%
+    stratums %>%
     dplyr::mutate(sampling_density = .data$n_stations/.data$area) %>%
     dplyr::arrange(.data$sampling_density)
 

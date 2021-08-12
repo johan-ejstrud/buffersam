@@ -1,0 +1,78 @@
+---
+title: "Buffered Random Sampling"
+author: "Johan Ejstrud"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Buffered Random Sampling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This package implements the buffered random sampling algorithm described in a [paper by Kingsley, M., Kanneworff, P., & Carlsson, D. (2004)](https://academic.oup.com/icesjms/article/61/1/12/699744).
+
+# How to use
+The main function of the package, `buffered_random_sampling`, requires two data sets denoting the stratums and the elements (points) within the stratums.
+
+The package include two example data sets, `element` and `stratum`, that shows how they should look. (See the exact details by running `?element` and `?stratum` in the console.)
+
+```{r setup}
+library(buffsam)
+
+head(element)
+head(stratum)
+```
+
+To create an allocation run the the function on two data sets:
+```{r}
+#allocation <- buffered_random_sampling(element, stratum)
+#head(allocation)
+```
+
+# Visualise allocation
+It's possible to visualise the allocation directly in R, by using `visualise_allocation`.
+
+```{r eval=FALSE}
+visualise_allocation(allocation)
+```
+
+To see the algorithm as it runs, use `visualise=TRUE`.
+
+```{r eval=FALSE}
+buffered_random_sampling(element, stratum, visualise="stratum")
+```
+
+The algorithm can stop with different frequencies. See `?buffered_random_sampling` for all options.
+
+# Algorithm in words
+This section contains a brief descriptions of the buffered random algorithm in words. Please refer to the paper for exact details.
+
+1. Create a list of all stratums, and a list of all elements.
+1. Calculate the sampling density for each stratum by dividing the required number of stations with the stratum's area.
+1. Pick the stratum with the lowest sampling density as the _current stratum_.
+1. Set buffering distance to sqrt((2A)/(nπ)), where A is stratum area and n is the required number of stations for the current startum.
+1. Pick an element at random that is not closer than the buffering distance to any other selected elements.
+    1. If the element is within the current stratum, mark it as  _selected_.
+    1. If the element is not within the current startum, mark it as _temporary selected_.     
+1. If the required number of stations has been reached:
+    1. Remove the current stratum from the stratum list.
+    1. Move all the temporary selected elements back to the element list.
+    1. Go to 3.
+1. If the element list is empty:
+    1. Move all the temporary selected elements back to the element list.
+    1. Move all the selected elements from this stratum back to the element list.
+    1. Reduce the buffering distance by 10 %.
+    1. Go to 5.
+1. Go to 5.
+
+
+## Stratums and Elements
+The _survey area_ is divided into a number of _stratums_ which contains a number of _elements_. Each element is a fixed point with a surrounding area. In the West Greenland shrimp survey each element is the center point of an approximately 2-n.mi. square.
+
+The algorithm doesn't impose any requirements on how the elements are laid out, or how many of them are avaiable. However, an element list is needed; the algorithm cannot select arbitrary points within each stratum.

@@ -4,12 +4,12 @@
 \alias{buffered_random_sampling}
 \title{Buffered Random Sampling}
 \usage{
-buffered_random_sampling(elements = NULL, stratums = NULL)
+buffered_random_sampling(element, stratum)
 }
 \arguments{
-\item{elements}{Data set with elements. See \code{\link{element}}.}
+\item{element}{Data set with elements. See \code{\link{element}}.}
 
-\item{stratums}{Data set with stratums. See \code{\link{stratum}}.}
+\item{stratum}{Data set with stratums. See \code{\link{stratum}}.}
 }
 \value{
 Data frame listing which stratum each element is associated with.

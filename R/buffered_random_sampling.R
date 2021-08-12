@@ -5,16 +5,16 @@
 #' The function requires two data sets and returns a data frame with the result
 #' of the buffered random sampling.
 #'
-#' @param elements Data set with elements. See \code{\link{element}}.
-#' @param stratums Data set with stratums. See \code{\link{stratum}}.
+#' @param element Data set with elements. See \code{\link{element}}.
+#' @param stratum Data set with stratums. See \code{\link{stratum}}.
 #'
 #' @return Data frame listing which stratum each element is associated with.
 #'
 #' @export
 #' @importFrom rlang .data
-buffered_random_sampling <- function(elements=NULL, stratums=NULL) {
+buffered_random_sampling <- function(element, stratum) {
   element <-
-    elements %>%
+    element %>%
     dplyr::mutate(
       current = FALSE,
       selected = FALSE,
@@ -23,7 +23,7 @@ buffered_random_sampling <- function(elements=NULL, stratums=NULL) {
     )
 
   stratum <-
-    stratums %>%
+    stratum %>%
     dplyr::mutate(sampling_density = .data$n_stations/.data$area) %>%
     dplyr::arrange(.data$sampling_density)
 

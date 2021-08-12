@@ -1,8 +1,3 @@
-utils::globalVariables(
-  c("longitude", "latitude", "selectable", "temp_selected", "selected",
-    "ne_countries", "geom_sf", "coord_sf")
-)
-
 #' Buffered Random Sampling
 #'
 #' Run the buffered random sampling algorithm.
@@ -13,10 +8,9 @@ utils::globalVariables(
 #' @param elements Data set with elements. See \code{\link{element}}.
 #' @param stratums Data set with stratums. See \code{\link{stratum}}.
 #'
-#' @examples
-#'
 #' @return Data frame listing which stratum each element is associated with.
 #'
+#' @export
 #' @importFrom rlang .data
 buffered_random_sampling <- function(elements=NULL, stratums=NULL) {
   element <-
@@ -78,11 +72,11 @@ buffered_random_sampling <- function(elements=NULL, stratums=NULL) {
 }
 
 n_selected_in_stratum <- function(element, current_stratum) {
-  element %>% dplyr::filter(.data$selected & stratum == current_stratum) %>% nrow()
+  element %>% dplyr::filter(.data$selected & .data$stratum == current_stratum) %>% nrow()
 }
 
 n_selectable_in_stratum <- function(element, current_stratum) {
-  element %>% dplyr::filter(.data$selectable & stratum == current_stratum) %>% nrow()
+  element %>% dplyr::filter(.data$selectable & .data$stratum == current_stratum) %>% nrow()
 }
 
 update_selectable <- function(element, element_Ids, buffering_distance) {
@@ -105,6 +99,10 @@ update_selectable <- function(element, element_Ids, buffering_distance) {
   return(element)
 }
 
+utils::globalVariables(
+  c("longitude", "latitude", "selectable", "temp_selected", "selected",
+    "ne_countries", "geom_sf", "coord_sf")
+)
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_brewer geom_point theme_light
 visualise <- function(df) {
   world <- ne_countries(scale = "medium", returnclass = "sf")
@@ -115,7 +113,7 @@ visualise <- function(df) {
       geom_sf() +
       coord_sf(xlim = c(min(df$longitude)-border, max(df$longitude)+border),
                ylim = c(min(df$latitude)-border, max(df$latitude)+border)) +
-      geom_tile(data = df, aes(x=longitude, y=latitude, fill=stratum), alpha=0.4) + # Stratum
+      geom_tile(data = df, aes(x=longitude, y=latitude, fill=.data$stratum), alpha=0.4) + # Stratum
       scale_fill_brewer(type="qua", palette=4) +
       geom_point(data=subset(df, selectable), aes(x=longitude, y=latitude), colour="grey") + # All points
       geom_point(data=subset(df, temp_selected), aes(x=longitude, y=latitude), colour="blue") +

@@ -3,8 +3,22 @@ utils::globalVariables(
     "ne_countries", "geom_sf", "coord_sf")
 )
 
+#' Buffered Random Sampling
+#'
+#' Run the buffered random sampling algorithm.
+#'
+#' The function requires two data sets and returns a data frame with the result
+#' of the buffered random sampling.
+#'
+#' @param elements Data set with elements. See \code{\link{element}}.
+#' @param stratums Data set with stratums. See \code{\link{stratum}}.
+#'
+#' @examples
+#'
+#' @return Data frame listing which stratum each element is associated with.
+#'
 #' @importFrom rlang .data
-buffered_random_sampling <- function() {
+buffered_random_sampling <- function(elements=NULL, stratums=NULL) {
   element <-
     readRDS(file.path('inst/extdata', 'element.Rdata')) %>%
     dplyr::mutate(

@@ -1,3 +1,6 @@
+library(dplyr)
+library(geosphere)
+
 set.seed(92)
 
 north <- 70
@@ -40,6 +43,8 @@ element <-
     elementId
   )
 
+usethis::use_data(element, overwrite = TRUE)
+
 #   d1   d2
 # +----+---+
 # | A  | B | d3
@@ -56,14 +61,9 @@ stratum <-
   data.frame(
     stratum = c("A",   "B",   "C",   "D"),
     area =   c(d1*d3, d2*d3, d1*d4, d2*d4)
-    ) %>%
+  ) %>%
   dplyr::mutate(
     n_stations = sample(2:20, nrow(.))
   )
 
-save_data <- function(dataset) {
-  saveRDS(dataset, file = file.path('inst/extdata', paste0(deparse(substitute(dataset)), '.Rdata')))
-}
-
-save_data(element)
-save_data(stratum)
+usethis::use_data(stratum, overwrite = TRUE)

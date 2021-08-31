@@ -71,7 +71,7 @@ buffered_random_sampling <- function(element, stratum) {
   }
 
   allocation <- element %>% dplyr::select(elementId, stratum)
-  return(allcation)
+  return(allocation)
 }
 
 n_selected_in_stratum <- function(element, current_stratum) {

@@ -4,7 +4,7 @@ This package implements the buffered random sampling algorithm described in the 
 # Installation
 Install `buffersam` by running:
 ```r
-devtools::install_github("johan-ejstrud/buffersam")
+devtools::install_github("johan-ejstrud/buffersam", build_vignettes = TRUE)
 ```
 
 # GitHub page

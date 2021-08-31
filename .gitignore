@@ -1,4 +1,5 @@
 .Rhistory
 .Rproj.user
 inst/doc
-*.knit.md
+/doc/
+/Meta/

@@ -1,7 +1,9 @@
 ---
 title: "Buffered Random Sampling"
 author: "Johan Ejstrud"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+      toc: true
 vignette: >
   %\VignetteIndexEntry{Buffered Random Sampling}
   %\VignetteEngine{knitr::rmarkdown}

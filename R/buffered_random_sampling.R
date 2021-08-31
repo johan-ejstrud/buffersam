@@ -9,12 +9,14 @@
 #' @param stratum Data frame with stratums. See \code{\link{stratum}}.
 #' @param visualise If TRUE a plot of the current stage of the algorithm is
 #' shown.
+#' @param verbose Print status while the algorithm is running.
 #'
 #' @return Data frame listing which stratum each element is associated with.
 #'
 #' @export
 #' @importFrom rlang .data
-buffered_random_sampling <- function(element, stratum, visualise=FALSE) {
+buffered_random_sampling <- function(element, stratum, visualise=FALSE,
+                                     verbose=FALSE) {
   element <-
     element %>%
     dplyr::mutate(
@@ -46,6 +48,11 @@ buffered_random_sampling <- function(element, stratum, visualise=FALSE) {
     element <- update_selectable(element, selected_elements, buffering_distance)
     element_backup <- element # Used to restart if allocation fails for buffer distance
 
+    if (isTRUE(verbose)) {
+      message(paste0("Allocating elements in stratum '", current_stratum, "' (",
+                     i, " of ", nrow(stratum), ")"))
+    }
+
     while (n_selected_in_stratum(element, current_stratum) < stations_required_in_stratum) {
       current_element <- sample(which(element$selectable), 1)
 
@@ -72,6 +79,8 @@ buffered_random_sampling <- function(element, stratum, visualise=FALSE) {
     }
     if (isTRUE(visualise)) visualise_allocation(element)
   }
+
+  if (isTRUE(verbose)) message("Allocation finished.")
 
   element$current <- FALSE
   element$temp_selected <- FALSE

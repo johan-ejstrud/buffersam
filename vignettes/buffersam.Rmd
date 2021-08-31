@@ -38,14 +38,24 @@ allocation <- buffered_random_sampling(element, stratum)
 head(allocation)
 ```
 
-# Visualise allocation
-It's possible to visualise the allocation directly in R, by using `visualise=TRUE`.
+# Get feedback while algorithm is running
+It's possible to get feedback while the algorithm is running, to know far it has come, or to better understand how the algorithm works. This feedback can be provided in text of visuals.
+
+## Visual feedback
+It's possible to visualise the allocation by using `visualise=TRUE`.
 
 ```{r}
-buffered_random_sampling(element, stratum, visualise="stratum")
+allocation <- buffered_random_sampling(element, stratum, visualise=TRUE)
 ```
 
-The algorithm can stop with different frequencies. See `?buffered_random_sampling` for all options.
+
+## Text feedback
+Use `verbose=TRUE` to print the status in the terminal as the algorithm is running.
+
+```{r}
+allocation <- buffered_random_sampling(element, stratum, verbose=TRUE)
+```
+
 
 # Algorithm in words
 This section contains a brief descriptions of the buffered random algorithm in words. Please refer to the paper for exact details.

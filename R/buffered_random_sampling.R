@@ -113,8 +113,8 @@ visualise <- function(df) {
   print(
     ggplot(data = world) +
       geom_sf() +
-      coord_sf(xlim = c(min(df$longitude)-border, max(df$longitude)+border),
-               ylim = c(min(df$latitude)-border, max(df$latitude)+border)) +
+      coord_sf(xlim = c(min(df$longitude), max(df$longitude)),
+               ylim = c(min(df$latitude), max(df$latitude))) +
       geom_tile(data = df, aes(x=longitude, y=latitude, fill=.data$stratum), alpha=0.4) + # Stratum
       scale_fill_brewer(type="qua", palette=4) +
       geom_point(data=subset(df, selectable), aes(x=longitude, y=latitude), colour="grey") + # All points

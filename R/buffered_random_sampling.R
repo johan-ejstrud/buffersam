@@ -5,14 +5,16 @@
 #' The function requires two data sets and returns a data frame with the result
 #' of the buffered random sampling.
 #'
-#' @param element Data set with elements. See \code{\link{element}}.
-#' @param stratum Data set with stratums. See \code{\link{stratum}}.
+#' @param element Data frame with elements. See \code{\link{element}}.
+#' @param stratum Data frame with stratums. See \code{\link{stratum}}.
+#' @param visualise If TRUE a plot of the current stage of the algorithm is
+#' shown.
 #'
 #' @return Data frame listing which stratum each element is associated with.
 #'
 #' @export
 #' @importFrom rlang .data
-buffered_random_sampling <- function(element, stratum) {
+buffered_random_sampling <- function(element, stratum, visualise=FALSE) {
   element <-
     element %>%
     dplyr::mutate(
@@ -68,10 +70,13 @@ buffered_random_sampling <- function(element, stratum) {
         buffering_distance <- buffering_distance * .9
       }
     }
+    if (isTRUE(visualise)) visualise_allocation(element)
   }
 
-  allocation <- element %>% dplyr::select(elementId, stratum)
-  return(allocation)
+  element$current <- FALSE
+  element$temp_selected <- FALSE
+  if (isTRUE(visualise)) visualise_allocation(element)
+  return(element)
 }
 
 n_selected_in_stratum <- function(element, current_stratum) {
@@ -106,8 +111,9 @@ utils::globalVariables(
   c("longitude", "latitude", "selectable", "temp_selected", "selected",
     "ne_countries", "geom_sf", "coord_sf", "elementId")
 )
+
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_brewer geom_point theme_light geom_sf coord_sf
-visualise <- function(df) {
+visualise_allocation <- function(df) {
   world <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf")
 
   print(

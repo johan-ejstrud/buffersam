@@ -37,15 +37,9 @@ head(allocation)
 ```
 
 # Visualise allocation
-It's possible to visualise the allocation directly in R, by using `visualise_allocation`.
+It's possible to visualise the allocation directly in R, by using `visualise=TRUE`.
 
-```{r eval=FALSE}
-visualise_allocation(allocation)
-```
-
-To see the algorithm as it runs, use `visualise=TRUE`.
-
-```{r eval=FALSE}
+```{r}
 buffered_random_sampling(element, stratum, visualise="stratum")
 ```
 

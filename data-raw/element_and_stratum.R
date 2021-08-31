@@ -8,7 +8,7 @@ south <- 59
 west <- -58
 east <- -44
 border <- 1.5
-step <- 1/4
+step <- 1/2
 
 divide.latitude  <- (north - south) * 0.8 + south
 divide.longitude <- (west - east) * 0.6 + east

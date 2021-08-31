@@ -106,10 +106,9 @@ utils::globalVariables(
   c("longitude", "latitude", "selectable", "temp_selected", "selected",
     "ne_countries", "geom_sf", "coord_sf", "elementId")
 )
-#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_brewer geom_point theme_light
+#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_brewer geom_point theme_light geom_sf coord_sf
 visualise <- function(df) {
-  world <- ne_countries(scale = "medium", returnclass = "sf")
-  border <- 3
+  world <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf")
 
   print(
     ggplot(data = world) +

@@ -7,5 +7,11 @@ Install `buffersam` by running:
 devtools::install_github("johan-ejstrud/buffersam", build_vignettes = TRUE)
 ```
 
+# How to use
+After installation, see the details on how to use the package by running:
+```r
+vignette("buffersam")
+```
+
 # GitHub page
 https://github.com/johan-ejstrud/buffersam

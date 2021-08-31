@@ -10,13 +10,15 @@
 #' @param visualise If TRUE a plot of the current stage of the algorithm is
 #' shown.
 #' @param verbose Print status while the algorithm is running.
+#' @param pause Stop the algorithm to inspect progress. Makes most sense when
+#' used together with \code{visualise} or \code{verbose}.
 #'
 #' @return Data frame listing which stratum each element is associated with.
 #'
 #' @export
 #' @importFrom rlang .data
 buffered_random_sampling <- function(element, stratum, visualise=FALSE,
-                                     verbose=FALSE) {
+                                     verbose=FALSE, pause=FALSE) {
   element <-
     element %>%
     dplyr::mutate(
@@ -52,6 +54,7 @@ buffered_random_sampling <- function(element, stratum, visualise=FALSE,
       message(paste0("Allocating elements in stratum '", current_stratum, "' (",
                      i, " of ", nrow(stratum), ")"))
     }
+    if (isTRUE(pause)) wait_for_user_input()
 
     while (n_selected_in_stratum(element, current_stratum) < stations_required_in_stratum) {
       current_element <- sample(which(element$selectable), 1)
@@ -114,6 +117,10 @@ update_selectable <- function(element, element_Ids, buffering_distance) {
       distance_to_selected_element > buffering_distance
   }
   return(element)
+}
+
+wait_for_user_input <- function() {
+  invisible(readline(prompt="Press [enter] to continue"))
 }
 
 utils::globalVariables(

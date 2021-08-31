@@ -4,15 +4,26 @@
 \alias{buffered_random_sampling}
 \title{Buffered Random Sampling}
 \usage{
-buffered_random_sampling(element, stratum, visualise = FALSE)
+buffered_random_sampling(
+  element,
+  stratum,
+  visualise = FALSE,
+  verbose = FALSE,
+  pause = FALSE
+)
 }
 \arguments{
-\item{element}{Dataframe with elements. See \code{\link{element}}.}
+\item{element}{Data frame with elements. See \code{\link{element}}.}
 
-\item{stratum}{Dataframe with stratums. See \code{\link{stratum}}.}
+\item{stratum}{Data frame with stratums. See \code{\link{stratum}}.}
 
-\item{visualise}{If TRUE a plot of the current stage of the algorithm will be
+\item{visualise}{If TRUE a plot of the current stage of the algorithm is
 shown.}
+
+\item{verbose}{Print status while the algorithm is running.}
+
+\item{pause}{Stop the algorithm to inspect progress. Makes most sense when
+used together with \code{visualise} or \code{verbose}.}
 }
 \value{
 Data frame listing which stratum each element is associated with.

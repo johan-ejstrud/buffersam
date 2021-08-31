@@ -8,14 +8,15 @@ south <- 59
 west <- -58
 east <- -44
 border <- 1.5
+step <- 1/4
 
 divide.latitude  <- (north - south) * 0.8 + south
 divide.longitude <- (west - east) * 0.6 + east
 
 border <-
   expand.grid(
-    latitude  = seq(south-border, north+border, by=1/2),
-    longitude = seq(west-border, east+border, by=1/2)
+    latitude  = seq(south-border, north+border, by=step),
+    longitude = seq(west-border, east+border, by=step)
   ) %>%
   dplyr::filter(
     latitude > north | latitude < south | longitude < west | longitude > east
@@ -24,8 +25,8 @@ border <-
 
 element <-
   expand.grid(
-    latitude = seq(south, north, by=1/4),
-    longitude = seq(west, east, by=1/4)
+    latitude = seq(south, north, by=step),
+    longitude = seq(west, east, by=step)
   ) %>%
   dplyr::mutate(
     stratum = dplyr::case_when(

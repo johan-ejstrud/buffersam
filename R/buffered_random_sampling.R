@@ -69,6 +69,9 @@ buffered_random_sampling <- function(element, stratum) {
       }
     }
   }
+
+  allocation <- element %>% dplyr::select(elementId, stratum)
+  return(allcation)
 }
 
 n_selected_in_stratum <- function(element, current_stratum) {
@@ -101,7 +104,7 @@ update_selectable <- function(element, element_Ids, buffering_distance) {
 
 utils::globalVariables(
   c("longitude", "latitude", "selectable", "temp_selected", "selected",
-    "ne_countries", "geom_sf", "coord_sf")
+    "ne_countries", "geom_sf", "coord_sf", "elementId")
 )
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_brewer geom_point theme_light
 visualise <- function(df) {

@@ -17,22 +17,23 @@ knitr::opts_chunk$set(
 
 This package implements the buffered random sampling algorithm described in a [paper by Kingsley, M., Kanneworff, P., & Carlsson, D. (2004)](https://academic.oup.com/icesjms/article/61/1/12/699744).
 
-# How to use
-The main function of the package, `buffered_random_sampling`, requires two data sets denoting the stratums and the elements (points) within the stratums.
+# Getting started
+The main function of the package, `buffered_random_sampling`, requires two data sets: one with stratums and one with elements (points) within the stratums.
 
 The package include two example data sets, `element` and `stratum`, that shows how they should look. (See the exact details by running `?element` and `?stratum` in the console.)
 
 ```{r setup}
 library(buffersam)
+set.seed(92)
 
+stratum
 head(element)
-head(stratum)
 ```
 
-To create an allocation run the the function on two data sets:
+To create an allocation run the function on two data sets:
 ```{r}
-#allocation <- buffered_random_sampling(element, stratum)
-#head(allocation)
+allocation <- buffered_random_sampling(element, stratum)
+head(allocation)
 ```
 
 # Visualise allocation

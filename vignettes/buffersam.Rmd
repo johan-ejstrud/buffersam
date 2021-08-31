@@ -57,7 +57,11 @@ allocation <- buffered_random_sampling(element, stratum, verbose=TRUE)
 ```
 
 ## Pause algorithm
-It's possible to pause the execution of the algorithm while it's running to allow time for inspecting the progress `pause=TRUE`. This only makes sense if used together with one of the other feedback parameters.
+It's possible to pause the execution of the algorithm while it's running to allow time for inspecting the progress. This only really makes sense if used together with one of the other feedback parameters.
+
+```{r eval=FALSE}
+allocation <- buffered_random_sampling(element, stratum, pause=TRUE)
+```
 
 # Algorithm in words
 This section contains a brief descriptions of the buffered random algorithm in words. Please refer to the paper for exact details.

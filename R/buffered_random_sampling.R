@@ -38,6 +38,15 @@ buffered_random_sampling <- function(element, stratum, visualise=FALSE,
     stations_required_in_stratum = stratum$n_stations[i]
     stratum_area <- stratum$area[i]
 
+    n_elements_in_stratum <- element %>% filter(stratum == "A") %>% nrow()
+    if (stations_required_in_stratum > n_elements_in_stratum) {
+      stop(glue::glue("There are fewer elements ({n_elements_in_stratum}) in ",
+                      "stratum '{current_stratum}' than the required number of ",
+                      "stations ({stations_required_in_stratum}).")
+           )
+    }
+
+
     buffering_distance <- sqrt((2*stratum_area) / (pi*stations_required_in_stratum))
     element$selectable <- TRUE
     element$temp_selected <- FALSE

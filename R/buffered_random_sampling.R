@@ -97,7 +97,9 @@ buffered_random_sampling <- function(element, stratum, visualise=FALSE,
   element$current <- FALSE
   element$temp_selected <- FALSE
   if (isTRUE(visualise)) visualise_allocation(element)
-  return(element)
+
+  allocation <- element %>% dplyr::filter(selected) %>% dplyr::select(elementId, stratum)
+  return(allocation)
 }
 
 n_selected_in_stratum <- function(element, current_stratum) {

@@ -21,7 +21,8 @@ Imports:
     utils,
     sf,
     rnaturalearth,
-    rnaturalearthdata
+    rnaturalearthdata,
+    rgeos
 Depends: 
     R (>= 2.10)
 Suggests: 

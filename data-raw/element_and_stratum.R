@@ -8,7 +8,7 @@ south <- 59
 west <- -58
 east <- -44
 border <- 1.5
-step <- 1
+step <- 1/2
 
 divide.latitude  <- (north - south) * 0.8 + south
 divide.longitude <- (west - east) * 0.6 + east
@@ -64,7 +64,7 @@ stratum <-
     area =   c(d1*d3, d2*d3, d1*d4, d2*d4)
   ) %>%
   dplyr::mutate(
-    n_stations = sample(2:20, nrow(.))
+    n_stations = sample(2:14, nrow(.))
   )
 
 usethis::use_data(stratum, overwrite = TRUE)

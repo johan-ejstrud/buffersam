@@ -35,7 +35,7 @@ head(element)
 To create an allocation run the function on two data sets:
 ```{r}
 allocation <- buffered_random_sampling(element, stratum)
-head(allocation)
+allocation
 ```
 
 # Get feedback while algorithm is running

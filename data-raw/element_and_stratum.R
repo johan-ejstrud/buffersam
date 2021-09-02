@@ -64,7 +64,7 @@ stratum <-
     area =   c(d1*d3, d2*d3, d1*d4, d2*d4)
   ) %>%
   dplyr::mutate(
-    n_stations = sample(2:14, nrow(.))
+    n_stations = sample(2:5, nrow(.))
   )
 
 usethis::use_data(stratum, overwrite = TRUE)

@@ -62,6 +62,16 @@ It's possible to pause the execution of the algorithm while it's running to allo
 ```{r eval=FALSE}
 allocation <- buffered_random_sampling(element, stratum, pause=TRUE)
 ```
+## Level of detail
+`detail` controls how often the algorithm should give feedback, visual, text, or
+pause. Level 1 for least detail, level 4 for most.
+```{r}
+allocation <- buffered_random_sampling(element, stratum, verbose=TRUE, detail=2)
+```
+
+```{r}
+allocation <- buffered_random_sampling(element, stratum, verbose=TRUE, detail=3)
+```
 
 # Algorithm in words
 This section contains a brief descriptions of the buffered random algorithm in words. Please refer to the paper for exact details.

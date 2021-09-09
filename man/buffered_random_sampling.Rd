@@ -14,19 +14,19 @@ buffered_random_sampling(
 )
 }
 \arguments{
-\item{element}{Data frame with elements. See \code{\link{element}}.}
+\item{element}{\code{data.frame} See \code{\link{element}}.}
 
-\item{stratum}{Data frame with stratums. See \code{\link{stratum}}.}
+\item{stratum}{\code{date.frame} See \code{\link{stratum}}.}
 
-\item{visualise}{If TRUE a plot of the current stage of the algorithm is
+\item{visualise}{\code{logical} If TRUE a plot of the current stage of the algorithm is
 shown.}
 
-\item{verbose}{Print status while the algorithm is running.}
+\item{verbose}{\code{logical} Print status while the algorithm is running.}
 
-\item{pause}{Stop the algorithm to inspect progress. Makes most sense when
+\item{pause}{\code{logical} Stop the algorithm to inspect progress. Makes most sense when
 used together with \code{visualise} or \code{verbose}.}
 
-\item{detail}{Control how often \code{visualise}, \code{verbose}, and
+\item{detail}{\code{numeric}. Control how often \code{visualise}, \code{verbose}, and
 \code{pause} are shown, printed, or executed. Possible values 1, 2, 3, and 4,
 corresponding to finish, after each stratum, each time the algorithm is
 reset, or after every element.}

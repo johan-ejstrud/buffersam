@@ -5,14 +5,14 @@
 #' The function requires two data sets and returns a data frame with the result
 #' of the buffered random sampling.
 #'
-#' @param element Data frame with elements. See \code{\link{element}}.
-#' @param stratum Data frame with stratums. See \code{\link{stratum}}.
-#' @param visualise If TRUE a plot of the current stage of the algorithm is
+#' @param element \code{data.frame} See \code{\link{element}}.
+#' @param stratum \code{date.frame} See \code{\link{stratum}}.
+#' @param visualise \code{logical} If TRUE a plot of the current stage of the algorithm is
 #' shown.
-#' @param verbose Print status while the algorithm is running.
-#' @param pause Stop the algorithm to inspect progress. Makes most sense when
+#' @param verbose \code{logical} Print status while the algorithm is running.
+#' @param pause \code{logical} Stop the algorithm to inspect progress. Makes most sense when
 #' used together with \code{visualise} or \code{verbose}.
-#' @param detail Control how often \code{visualise}, \code{verbose}, and
+#' @param detail \code{numeric}. Control how often \code{visualise}, \code{verbose}, and
 #' \code{pause} are shown, printed, or executed. Possible values 1, 2, 3, and 4,
 #' corresponding to finish, after each stratum, each time the algorithm is
 #' reset, or after every element.

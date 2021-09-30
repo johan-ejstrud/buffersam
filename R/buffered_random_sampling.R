@@ -32,6 +32,10 @@ buffered_random_sampling <- function(element, stratum, visualise=FALSE,
       temp_selected = FALSE
     )
 
+  if (typeof(element$latitude) != "double" || typeof(element$longitude) != "double") {
+    stop("Latitude and longitude in dataset 'element' need to be of type 'double'.")
+  }
+
   stratum <-
     stratum %>%
     dplyr::mutate(sampling_density = .data$n_stations/.data$area) %>%

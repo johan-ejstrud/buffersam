@@ -7,22 +7,25 @@
 #'
 #' @param element \code{data.frame} See \code{\link{element}}.
 #' @param stratum \code{date.frame} See \code{\link{stratum}}.
-#' @param visualise \code{logical} If TRUE a plot of the current stage of the algorithm is
-#' shown.
+#' @param preselect_element \code{data.frame} Vector of elementIds to mark as
+#' selected before the algorithm starts running.
+#' @param visualise \code{logical} If TRUE a plot of the current stage of the
+#' algorithm is shown.
 #' @param verbose \code{logical} Print status while the algorithm is running.
-#' @param pause \code{logical} Stop the algorithm to inspect progress. Makes most sense when
-#' used together with \code{visualise} or \code{verbose}.
-#' @param detail \code{numeric}. Control how often \code{visualise}, \code{verbose}, and
-#' \code{pause} are shown, printed, or executed. Possible values 1, 2, 3, and 4,
-#' corresponding to finish, after each stratum, each time the algorithm is
-#' reset, or after every element.
+#' @param pause \code{logical} Stop the algorithm to inspect progress. Makes
+#' most sense when used together with \code{visualise} or \code{verbose}.
+#' @param detail \code{numeric}. Control how often \code{visualise},
+#' \code{verbose}, and \code{pause} are shown, printed, or executed. Possible
+#' values 1, 2, 3, and 4, corresponding to finish, after each stratum, each time
+#' the algorithm is reset, or after every element.
 #'
 #' @return Data frame listing which stratum each element is associated with.
 #'
 #' @export
 #' @importFrom rlang .data
-buffered_random_sampling <- function(element, stratum, visualise=FALSE,
-                                     verbose=FALSE, pause=FALSE, detail=2) {
+buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
+                                     visualise=FALSE, verbose=FALSE,
+                                     pause=FALSE, detail=2) {
   element <-
     element %>%
     dplyr::mutate(
@@ -35,6 +38,8 @@ buffered_random_sampling <- function(element, stratum, visualise=FALSE,
   if (typeof(element$latitude) != "double" || typeof(element$longitude) != "double") {
     stop("Latitude and longitude in dataset 'element' need to be of type 'double'.")
   }
+
+  element[which(element$elementId %in% preselect_element), 'selected'] <- TRUE
 
   stratum <-
     stratum %>%

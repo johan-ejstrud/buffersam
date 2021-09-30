@@ -7,6 +7,7 @@
 buffered_random_sampling(
   element,
   stratum,
+  preselect_element = NULL,
   visualise = FALSE,
   verbose = FALSE,
   pause = FALSE,
@@ -18,18 +19,21 @@ buffered_random_sampling(
 
 \item{stratum}{\code{date.frame} See \code{\link{stratum}}.}
 
-\item{visualise}{\code{logical} If TRUE a plot of the current stage of the algorithm is
-shown.}
+\item{preselect_element}{\code{data.frame} Vector of elementIds to mark as
+selected before the algorithm starts running.}
+
+\item{visualise}{\code{logical} If TRUE a plot of the current stage of the
+algorithm is shown.}
 
 \item{verbose}{\code{logical} Print status while the algorithm is running.}
 
-\item{pause}{\code{logical} Stop the algorithm to inspect progress. Makes most sense when
-used together with \code{visualise} or \code{verbose}.}
+\item{pause}{\code{logical} Stop the algorithm to inspect progress. Makes
+most sense when used together with \code{visualise} or \code{verbose}.}
 
-\item{detail}{\code{numeric}. Control how often \code{visualise}, \code{verbose}, and
-\code{pause} are shown, printed, or executed. Possible values 1, 2, 3, and 4,
-corresponding to finish, after each stratum, each time the algorithm is
-reset, or after every element.}
+\item{detail}{\code{numeric}. Control how often \code{visualise},
+\code{verbose}, and \code{pause} are shown, printed, or executed. Possible
+values 1, 2, 3, and 4, corresponding to finish, after each stratum, each time
+the algorithm is reset, or after every element.}
 }
 \value{
 Data frame listing which stratum each element is associated with.

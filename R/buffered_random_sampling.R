@@ -199,6 +199,7 @@ visualise_allocation <- function(df) {
       geom_point(data=subset(df, selectable), aes(x=longitude, y=latitude), colour="grey") + # All points
       geom_point(data=subset(df, temp_selected), aes(x=longitude, y=latitude), colour="blue") +
       geom_point(data=subset(df, selected), aes(x=longitude, y=latitude), shape=21, colour="black", fill="green") +
-      theme_light()
+      theme_light(),
+    newpage = FALSE
   )
 }

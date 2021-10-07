@@ -35,10 +35,6 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
       temp_selected = FALSE
     )
 
-  if (typeof(element$latitude) != "double" || typeof(element$longitude) != "double") {
-    stop("Latitude and longitude in dataset 'element' need to be of type 'double'.")
-  }
-
   element[which(element$elementId %in% preselect_element), 'selected'] <- TRUE
 
   stratum <-
@@ -46,21 +42,12 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
     dplyr::mutate(sampling_density = .data$n_stations/.data$area) %>%
     dplyr::arrange(.data$sampling_density)
 
+  check_data_sanity(element, stratum)
+
   for (i in 1:nrow(stratum)) {
     current_stratum <- stratum$stratum[i]
     stations_required_in_stratum = stratum$n_stations[i]
     stratum_area <- stratum$area[i]
-
-    n_elements_in_stratum <- element %>% dplyr::filter(stratum == current_stratum) %>% nrow()
-
-    if (stations_required_in_stratum > n_elements_in_stratum) {
-      stop(glue::glue("There are fewer elements ({n_elements_in_stratum}) in ",
-                      "stratum '{current_stratum}' than the required number of ",
-                      "stations ({stations_required_in_stratum}). Increase the ",
-                      "number of elements, or reduce the required number of ",
-                      "stations.")
-           )
-    }
 
     buffering_distance <- sqrt((2*stratum_area) / (pi*stations_required_in_stratum))
     element$selectable <- TRUE
@@ -179,6 +166,42 @@ update_selectable <- function(element, element_Ids, buffering_distance) {
 wait_for_user_input <- function() {
   invisible(readline(prompt="Press [enter] to continue"))
 }
+
+contains_duplicates <- function(c) {
+  length(c) != length(unique(c))
+}
+
+check_data_sanity <- function(element, stratum) {
+  if (typeof(element$latitude) != "double" || typeof(element$longitude) != "double") {
+    stop("Latitude and longitude in dataset 'element' need to be of type 'double'.")
+  }
+
+  if (contains_duplicates(element$elementId)) {
+    stop(glue::glue("There are duplicates in element$elementId. All entires need
+                    to be unique"))
+  }
+
+  if (contains_duplicates(stratum$stratum)) {
+    stop(glue::glue("There are duplicates in stratum$stratum. All entires need
+                    to be unique"))
+  }
+
+  for (this_stratum in stratum$stratum) {
+    n_elements_in_stratum <- element %>% dplyr::filter(stratum == this_stratum) %>% nrow()
+    stations_required_in_stratum <- stratum[which(stratum$stratum == this_stratum), ]$n_stations
+
+    if (stations_required_in_stratum > n_elements_in_stratum) {
+      stop(glue::glue("There are fewer elements ({n_elements_in_stratum}) in ",
+                      "stratum '{this_stratum}' than the required number of ",
+                      "stations ({stations_required_in_stratum}). Increase the ",
+                      "number of elements, or reduce the required number of ",
+                      "stations.")
+      )
+    }
+  }
+}
+
+
 
 utils::globalVariables(
   c("longitude", "latitude", "selectable", "temp_selected", "selected",

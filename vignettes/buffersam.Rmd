@@ -96,6 +96,6 @@ This section contains a brief descriptions of the buffered random algorithm in w
 
 
 ## Stratums and Elements
-The _survey area_ is divided into a number of _stratums_ which contains a number of _elements_. Each element is a fixed point with a surrounding area. In the West Greenland shrimp survey each element is the center point of an approximately 2-n.mi. square.
+The _survey area_ is divided into a number of _stratums_ which contains a number of _elements_. Each element is a fixed point with a surrounding area. In the West Greenland shrimp survey each element is the center point of an approximately 2 nautical miles square.
 
 The algorithm doesn't impose any requirements on how the elements are laid out, or how many of them are avaiable. However, an element list is needed; the algorithm cannot select arbitrary points within each stratum.

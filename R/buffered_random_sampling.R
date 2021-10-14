@@ -37,6 +37,13 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
 
   element[which(element$elementId %in% preselect_element), 'selected'] <- TRUE
 
+  # Remove duplicated elements at random. Pre-selected elements are always kept.
+  # See more in package vignette.
+  element <-
+    element[sample(nrow(element)), ] %>% # Shuffle row-wise
+    dplyr::arrange(-selected) %>%
+    dplyr::distinct(elementId, .keep_all = TRUE)
+
   stratum <-
     stratum %>%
     dplyr::mutate(sampling_density = .data$n_stations/.data$area) %>%

@@ -73,6 +73,17 @@ allocation <- buffered_random_sampling(element, stratum, verbose=TRUE, detail=2)
 allocation <- buffered_random_sampling(element, stratum, verbose=TRUE, detail=3)
 ```
 
+# Preselect elements
+It's possible that some elements need to be selected without regards to buffered random sampling. These elements should be pre-selected, as if the algorithm had already selected them. This could be elements from previous years that need to be repeated.
+
+```{r}
+preselect_element <- head(element, 2)
+preselect_element
+```
+```{r eval=FALSE}
+allocation <- buffered_random_sampling(element, stratum, preselect_element = preselect_element)
+```
+
 # Algorithm in words
 This section contains a brief descriptions of the buffered random algorithm in words. Please refer to the paper for exact details.
 

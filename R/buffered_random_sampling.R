@@ -7,8 +7,10 @@
 #'
 #' @param element \code{data.frame} See \code{\link{element}}.
 #' @param stratum \code{date.frame} See \code{\link{stratum}}.
-#' @param preselect_element \code{data.frame} Vector of elementIds to mark as
-#' selected before the algorithm starts running.
+#' @param preselect_element \code{data.frame} same format as
+#' \code{\link{element}}, but only requires the columns \code{elementId} and
+#' \code{stratum}. All elements in this data set are selected before the
+#' algorithm starts running.
 #' @param visualise \code{logical} If TRUE a plot of the current stage of the
 #' algorithm is shown.
 #' @param verbose \code{logical} Print status while the algorithm is running.
@@ -26,6 +28,7 @@
 buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
                                      visualise=FALSE, verbose=FALSE,
                                      pause=FALSE, detail=2) {
+
   element <-
     element %>%
     dplyr::mutate(
@@ -35,7 +38,13 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
       temp_selected = FALSE
     )
 
-  element[which(element$elementId %in% preselect_element), 'selected'] <- TRUE
+  if (!is.null(preselect_element)) {
+    index_of_preselected_elements <-
+      paste0(element$elementId, element$stratum) %in%
+      paste0(preselect_element$elementId, preselect_element$stratum)
+
+    element[index_of_preselected_elements, 'selected'] <- TRUE
+  }
 
   # Remove duplicated elements at random. Pre-selected elements are always kept.
   # See more in package vignette.
@@ -207,6 +216,7 @@ check_data_sanity <- function(element, stratum) {
     }
   }
 }
+
 
 
 

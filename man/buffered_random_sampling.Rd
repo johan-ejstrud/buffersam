@@ -19,8 +19,10 @@ buffered_random_sampling(
 
 \item{stratum}{\code{date.frame} See \code{\link{stratum}}.}
 
-\item{preselect_element}{\code{data.frame} Vector of elementIds to mark as
-selected before the algorithm starts running.}
+\item{preselect_element}{\code{data.frame} same format as
+\code{\link{element}}, but only requires the columns \code{elementId} and
+\code{stratum}. All elements in this data set are selected before the
+algorithm starts running.}
 
 \item{visualise}{\code{logical} If TRUE a plot of the current stage of the
 algorithm is shown.}

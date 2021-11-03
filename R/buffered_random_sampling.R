@@ -23,6 +23,10 @@
 #'
 #' @return Data frame listing which stratum each element is associated with.
 #'
+#' @examples
+#' # See vignette("buffersam") for more examples.
+#' allocation <- buffered_random_sampling(element, stratum)
+#'
 #' @export
 #' @importFrom rlang .data
 buffered_random_sampling <- function(element, stratum, preselect_element=NULL,

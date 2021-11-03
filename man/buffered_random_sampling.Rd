@@ -47,3 +47,8 @@ Run the buffered random sampling algorithm.
 The function requires two data sets and returns a data frame with the result
 of the buffered random sampling.
 }
+\examples{
+# See vignette("buffersam") for more examples.
+allocation <- buffered_random_sampling(element, stratum)
+
+}

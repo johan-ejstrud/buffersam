@@ -1,5 +1,5 @@
-# buffersam (development version)
-
+# buffersam 0.1.2
+* Add example to documentation for buffered_random_sampling()
 * Add shell script to easily tag new releases. 
 
 # buffersam 0.1.1

@@ -51,12 +51,7 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
     element[index_of_preselected_elements, 'selected'] <- TRUE
   }
 
-  # Remove duplicated elements at random. Pre-selected elements are always kept.
-  # See more in package vignette.
-  element <-
-    element[sample(nrow(element)), ] %>% # Shuffle row-wise
-    dplyr::arrange(-selected) %>%
-    dplyr::distinct(elementId, .keep_all = TRUE)
+  element <- assign_duplicated_elements_to_stratum(element)
 
   stratum <-
     stratum %>%
@@ -163,6 +158,33 @@ n_selected_in_stratum <- function(element, current_stratum) {
 
 n_selectable_in_stratum <- function(element, current_stratum) {
   element %>% dplyr::filter(.data$selectable & .data$stratum == current_stratum) %>% nrow()
+}
+
+assign_duplicated_elements_to_stratum <- function(element) {
+  # Assign elements to *one* stratum by remove duplicated elements at random.
+  # If the data contains the column preselect_probability the sampling will be
+  # done proportionally to these values. See more in package vignette.
+
+  if (!"preselect_probability" %in% names(element)) {
+    element$preselect_probability <- 1
+  }
+
+  preselected_elements <- dplyr::filter(element, selected)$elementId
+
+  # Remove duplicates of preselected elements
+  element <-
+    dplyr::filter(element, ! elementId %in% preselected_elements | selected)
+
+  tmp <- data.frame()
+
+  for (eId in unique(element$elementId)) {
+    df <- dplyr::filter(element, eId==elementId)
+    row <- df[sample(1:nrow(df), 1, prob=df$preselect_probability), ]
+
+    tmp <- rbind(tmp, row)
+  }
+
+  return(tmp)
 }
 
 update_selectable <- function(element, element_Ids, buffering_distance) {

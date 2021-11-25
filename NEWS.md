@@ -1,3 +1,6 @@
+# buffersam 0.2.0
+* Add proportional sampling when an element is inside multiple strata.
+
 # buffersam 0.1.3
 * Improve plot
 

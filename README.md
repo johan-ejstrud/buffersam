@@ -18,7 +18,10 @@ https://github.com/johan-ejstrud/buffersam
 
 # Versioning
 When a new version is ready
+1. Run `devtools::check().
 1. Run `usethis::use_version("patch/minor/major")`.
 1. Update `NEWS.sh` and commit.
-1. Run `./tag_release.sh`. This tags and pushes the commit.
-1. Open https://github.com/johan-ejstrud/buffersam/tags and make release.
+1. Run `./tag_release.sh`.
+1. Open https://github.com/johan-ejstrud/buffersam/tags
+1. Click 'Create release'.
+1. Click 'Publish release'.

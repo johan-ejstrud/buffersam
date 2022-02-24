@@ -90,7 +90,7 @@ This section contains a brief descriptions of the buffered random algorithm in w
 1. Create a list of all stratums, and a list of all elements.
 1. Calculate the sampling density for each stratum by dividing the required number of stations with the stratum's area.
 1. Pick the stratum with the lowest sampling density as the _current stratum_.
-1. Set buffering distance to sqrt((2A)/(nπ)), where A is stratum area and n is the required number of stations for the current startum.
+1. Set buffering distance to sqrt((4𝜏A)/(nπ)), where A is stratum area, n is the required number of stations for the current stratum, and 𝜏 is the 'packing intensity' which is set to 0.5 by default (see paper for more detail).
 1. Pick an element at random that is not closer than the buffering distance to any other selected elements.
     1. If the element is within the current stratum, mark it as  _selected_.
     1. If the element is not within the current startum, mark it as _temporary selected_.     

@@ -11,7 +11,8 @@ buffered_random_sampling(
   visualise = FALSE,
   verbose = FALSE,
   pause = FALSE,
-  detail = 2
+  detail = 2,
+  tau = 0.5
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ most sense when used together with \code{visualise} or \code{verbose}.}
 \code{verbose}, and \code{pause} are shown, printed, or executed. Possible
 values 1, 2, 3, and 4, corresponding to finish, after each stratum, each time
 the algorithm is reset, or after every element.}
+
+\item{tau}{\code{numeric}. Sets the initial "packing intensity". 0.5 is the
+default. See the paper for more detail.}
 }
 \value{
 Data frame listing which stratum each element is associated with.

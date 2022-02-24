@@ -20,6 +20,8 @@
 #' \code{verbose}, and \code{pause} are shown, printed, or executed. Possible
 #' values 1, 2, 3, and 4, corresponding to finish, after each stratum, each time
 #' the algorithm is reset, or after every element.
+#' @param tau \code{numeric}. Sets the initial "packing intensity". Default is
+#' 0.5. See the paper for more detail.
 #'
 #' @return Data frame listing which stratum each element is associated with.
 #'
@@ -31,7 +33,7 @@
 #' @importFrom rlang .data
 buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
                                      visualise=FALSE, verbose=FALSE,
-                                     pause=FALSE, detail=2) {
+                                     pause=FALSE, detail=2, tau=0.5) {
   #graphics.off() # Clear plot window
 
   element <-
@@ -65,7 +67,7 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
     stations_required_in_stratum = stratum$n_stations[i]
     stratum_area <- stratum$area[i]
 
-    buffering_distance <- sqrt((2*stratum_area) / (pi*stations_required_in_stratum))
+    buffering_distance <- sqrt((4*tau*stratum_area) / (pi*stations_required_in_stratum))
     element$selectable <- TRUE
     element$temp_selected <- FALSE
     selected_elements <-

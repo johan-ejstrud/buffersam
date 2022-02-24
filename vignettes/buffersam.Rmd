@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 This package implements the buffered random sampling algorithm described in a [paper by Kingsley, M., Kanneworff, P., & Carlsson, D. (2004)](https://academic.oup.com/icesjms/article/61/1/12/699744).
 
 # Getting started
-The main function of the package, `buffered_random_sampling`, requires two data sets: one with stratums and one with elements (points) within the stratums.
+The main function of the package, `buffered_random_sampling`, requires two data sets: one with strata and one with elements (points) within the strata.
 
 The package include two example data sets, `element` and `stratum`, that shows how they should look. (See the exact details by running `?element` and `?stratum` in the console.)
 
@@ -106,13 +106,13 @@ This section contains a brief descriptions of the buffered random algorithm in w
 1. Go to 5.
 
 
-## Stratums and Elements
-The _survey area_ is divided into a number of _stratums_ which contains a number of _elements_. Each element is a fixed point with a surrounding area. In the West Greenland shrimp survey each element is the center point of an approximately 2 nautical miles square.
+## Strata and Elements
+The _survey area_ is divided into a number of _strata_ which contains a number of _elements_. Each element is a fixed point with a surrounding area. In the West Greenland shrimp survey each element is the center point of an approximately 2 nautical miles square.
 
 The algorithm doesn't impose any requirements on how the elements are laid out, or how many of them are available. However, an element list is needed; the algorithm cannot select arbitrary points within each stratum.
 
 ## Elements belonging to multiple strata
-Elements can be placed so its surrounding area is inside two or more strata. This can be represented in the `elements` data frame by having multiple rows with the same `elementId` butna different values for `stratum`. 
+Elements can be placed so its surrounding area is inside two or more strata. This can be represented in the `elements` data frame by having multiple rows with the same `elementId` but a different values for `stratum`. 
 
 Before the algorithm runs, these elements are assigned to _one_ stratum at random, by removing all but one of the duplicated `elementId`'s from the data set. If the `elements` data frame contains the column `preselect_probability` the sampling will be done proportionally to the values in this column. A possible value for this variable is the area the element occupy in the given stratum.
 

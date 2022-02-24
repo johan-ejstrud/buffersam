@@ -22,7 +22,7 @@ This package implements the buffered random sampling algorithm described in a [p
 # Getting started
 The main function of the package, `buffered_random_sampling`, requires two data sets: one with strata and one with elements (points) within the strata.
 
-The package include two example data sets, `element` and `stratum`, that shows how they should look. (See the exact details by running `?element` and `?stratum` in the console.)
+The package includes two example data sets, `element` and `stratum`, showing how they should look. (See the exact details by running `?element` and `?stratum` in the console.)
 
 ```{r setup}
 library(buffersam)
@@ -38,8 +38,8 @@ allocation <- buffered_random_sampling(element, stratum)
 allocation
 ```
 
-# Get feedback while algorithm is running
-It's possible to get feedback while the algorithm is running, to know far it has come, or to better understand how the algorithm works. This feedback can be provided in text of visuals.
+# Get feedback while the algorithm is running
+It's possible to get feedback while the algorithm is running, to know how far it has come or better understand how the algorithm works. This feedback can be provided in text or visuals.
 
 ## Visual feedback
 It's possible to visualise the allocation by using `visualise=TRUE`.
@@ -74,7 +74,7 @@ allocation <- buffered_random_sampling(element, stratum, verbose=TRUE, detail=3)
 ```
 
 # Preselect elements
-It's possible that some elements need to be selected without regards to buffered random sampling. These elements should be pre-selected, as if the algorithm had already selected them. This could be elements from previous years that need to be repeated.
+It's possible that some elements need to be selected without regard to buffered random sampling. These elements should be pre-selected, as if the algorithm had already selected them. These could be elements from previous years that need to be repeated.
 
 ```{r}
 preselect_element <- head(element, 2)
@@ -85,15 +85,15 @@ allocation <- buffered_random_sampling(element, stratum, preselect_element = pre
 ```
 
 # Algorithm in words
-This section contains a brief descriptions of the buffered random algorithm in words. Please refer to the paper for exact details.
+This section contains a brief description of the buffered random algorithm in words. Please refer to the paper for exact details.
 
-1. Create a list of all stratums, and a list of all elements.
-1. Calculate the sampling density for each stratum by dividing the required number of stations with the stratum's area.
+1. Create a list of all strata and a list of all elements.
+1. Calculate the sampling density for each stratum by dividing the required number of stations by the stratum's area.
 1. Pick the stratum with the lowest sampling density as the _current stratum_.
 1. Set buffering distance to sqrt((4𝜏A)/(nπ)), where A is stratum area, n is the required number of stations for the current stratum, and 𝜏 is the 'packing intensity' which is set to 0.5 by default (see paper for more detail).
 1. Pick an element at random that is not closer than the buffering distance to any other selected elements.
     1. If the element is within the current stratum, mark it as  _selected_.
-    1. If the element is not within the current startum, mark it as _temporary selected_.     
+    1. If the element is not within the current stratum, mark it as _temporary selected_.  
 1. If the required number of stations has been reached:
     1. Remove the current stratum from the stratum list.
     1. Move all the temporary selected elements back to the element list.
@@ -107,14 +107,14 @@ This section contains a brief descriptions of the buffered random algorithm in w
 
 
 ## Strata and Elements
-The _survey area_ is divided into a number of _strata_ which contains a number of _elements_. Each element is a fixed point with a surrounding area. In the West Greenland shrimp survey each element is the center point of an approximately 2 nautical miles square.
+The _survey area_ is divided into a number of _strata_ which contains a number of _elements_. Each element is a fixed point with a surrounding area. In the West Greenland shrimp survey, each element is the center point of a ~2 nautical miles square.
 
-The algorithm doesn't impose any requirements on how the elements are laid out, or how many of them are available. However, an element list is needed; the algorithm cannot select arbitrary points within each stratum.
+The algorithm doesn't impose any requirements on how the elements are laid out or how many of them are available. However, an element list is needed; the algorithm cannot select arbitrary points within each stratum.
 
 ## Elements belonging to multiple strata
-Elements can be placed so its surrounding area is inside two or more strata. This can be represented in the `elements` data frame by having multiple rows with the same `elementId` but a different values for `stratum`. 
+Elements can be placed, so its surrounding area is inside two or more strata. This can be represented in the `elements` data frame by having multiple rows with the same `elementId` but different values for `stratum`.
 
-Before the algorithm runs, these elements are assigned to _one_ stratum at random, by removing all but one of the duplicated `elementId`'s from the data set. If the `elements` data frame contains the column `preselect_probability` the sampling will be done proportionally to the values in this column. A possible value for this variable is the area the element occupy in the given stratum.
+Before the algorithm runs, these elements are assigned to _one_ stratum at random by removing all but one of the duplicated `elementId`'s from the data set. If the `elements` data frame contains the column `preselect_probability`, the sampling will be done proportionally to the values in this column. A possible value for this variable is the area the element occupies in the given stratum.
 
 This is done to avoid increasing the likelihood of these elements being selected. Pre-selected elements are always kept.
 

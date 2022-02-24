@@ -38,8 +38,8 @@ most sense when used together with \code{visualise} or \code{verbose}.}
 values 1, 2, 3, and 4, corresponding to finish, after each stratum, each time
 the algorithm is reset, or after every element.}
 
-\item{tau}{\code{numeric}. Sets the initial "packing intensity". 0.5 is the
-default. See the paper for more detail.}
+\item{tau}{\code{numeric}. Sets the initial "packing intensity". Default is
+0.5. See the paper for more detail.}
 }
 \value{
 Data frame listing which stratum each element is associated with.

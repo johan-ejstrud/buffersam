@@ -1,3 +1,6 @@
+# buffersam 0.3.0
+* Add option to set 'packing density' tau, which is 0.5 by default.
+
 # buffersam 0.2.1
 * Add versioning instructions.
 

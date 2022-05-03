@@ -6,6 +6,7 @@ Install `buffersam` by running:
 ```r
 devtools::install_github("johan-ejstrud/buffersam", build_vignettes = TRUE)
 ```
+(might only work with R version >= 4.1.0)
 
 # How to use
 After installation, see the details on how to use the package by running:

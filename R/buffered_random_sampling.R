@@ -150,7 +150,10 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
     if (isTRUE(visualise)) visualise_allocation(element)
   }
 
-  allocation <- element %>% dplyr::filter(selected) %>% dplyr::select(elementId, stratum)
+  allocation <-
+    element %>%
+    dplyr::filter(selected) %>%
+    dplyr::select(elementId, latitude, longitude, stratum)
   return(allocation)
 }
 

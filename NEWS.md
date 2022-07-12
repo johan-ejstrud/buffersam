@@ -1,3 +1,6 @@
+# buffersam 0.4.0
+* Add latitude, longitude, and whether an element was preselected or not in allocation data frame.
+
 # buffersam 0.3.0
 * Add option to set 'packing density' tau, which is 0.5 by default.
 

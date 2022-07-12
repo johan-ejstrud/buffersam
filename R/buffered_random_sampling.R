@@ -42,7 +42,8 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
       current = FALSE,
       selected = FALSE,
       selectable = TRUE,
-      temp_selected = FALSE
+      temp_selected = FALSE,
+      preselected = FALSE
     )
 
   if (!is.null(preselect_element)) {
@@ -51,6 +52,7 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
       paste0(preselect_element$elementId, preselect_element$stratum)
 
     element[index_of_preselected_elements, 'selected'] <- TRUE
+    element[index_of_preselected_elements, 'preselected'] <- TRUE
   }
 
   element <- assign_duplicated_elements_to_stratum(element)
@@ -153,7 +155,7 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
   allocation <-
     element %>%
     dplyr::filter(selected) %>%
-    dplyr::select(elementId, latitude, longitude, stratum)
+    dplyr::select(elementId, latitude, longitude, stratum, preselected)
   return(allocation)
 }
 

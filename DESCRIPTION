@@ -1,6 +1,6 @@
 Package: buffersam
 Title: Run Buffered Random Sampling Algorithm
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: 
     person(given = "Johan",
            family = "Ejstrud",

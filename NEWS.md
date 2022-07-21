@@ -1,3 +1,6 @@
+# buffersam 0.4.1
+* Bugfix: Recalculate selectable after reducing buffer distance
+
 # buffersam 0.4.0
 * Add latitude, longitude, and whether an element was preselected or not in allocation data frame.
 

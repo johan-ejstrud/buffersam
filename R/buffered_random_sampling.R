@@ -72,6 +72,8 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
     buffering_distance <- sqrt((4*tau*stratum_area) / (pi*stations_required_in_stratum))
     element$selectable <- TRUE
     element$temp_selected <- FALSE
+    element_backup <- element # Used to restart if allocation fails for buffer distance
+
     selected_elements <-
       element %>%
       dplyr::filter(.data$selected) %>%
@@ -79,7 +81,6 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
       unlist()
 
     element <- update_selectable(element, selected_elements, buffering_distance)
-    element_backup <- element # Used to restart if allocation fails for buffer distance
 
     if (detail >= 2) {
       if (isTRUE(visualise)) visualise_allocation(element)
@@ -135,6 +136,15 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
         }
 
         element <- element_backup
+
+        # Recalculate selectable after updating buffering distance
+        selected_elements <-
+          element %>%
+          dplyr::filter(.data$selected) %>%
+          dplyr::select(.data$elementId) %>%
+          unlist()
+
+        element <- update_selectable(element, selected_elements, buffering_distance)
       }
     }
     if (detail >= 3) {
@@ -281,5 +291,5 @@ visualise_allocation <- function(df) {
 utils::globalVariables(
   c("longitude", "latitude", "selectable", "temp_selected", "selected",
     "ne_countries", "geom_sf", "coord_sf", "elementId", "current", "stratum",
-    "value", "type")
+    "value", "type", "preselected")
 )

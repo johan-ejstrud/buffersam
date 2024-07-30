@@ -1,3 +1,6 @@
+# buffersam 0.4.2
+* Remove dependencies on unused packages 'sf' and 'rgeos'.
+
 # buffersam 0.4.1
 * Bugfix: Recalculate selectable after reducing buffer distance
 

@@ -162,10 +162,19 @@ buffered_random_sampling <- function(element, stratum, preselect_element=NULL,
     if (isTRUE(visualise)) visualise_allocation(element)
   }
 
+  print(names(element))
+
   allocation <-
     element %>%
     dplyr::filter(selected) %>%
-    dplyr::select(elementId, latitude, longitude, stratum, preselected)
+    # Remove temporary columns
+    dplyr::select(-current,
+                  -selected,
+                  -selectable,
+                  -temp_selected,
+                  -preselect_probability
+                  )
+
   return(allocation)
 }
 
